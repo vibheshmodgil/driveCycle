@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="card border-success mb-3 contaoner">
+  <div class="card-header bg-transparent border-success">Standard Drive Cycle </div>
+  <div class="card-body text-success">
+    <div class="container">
+        <div class="row">
+            {% for card in standardDriveCycle %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <img src="http://getelectricvehicle.com/wp-content/uploads/2018/01/FTP-75.png"card-img-top" alt="{{ card['title'] }}">
+                    <div class="card-body text-success">
+                        <h5 class="card-title">{{ card['title'] }}</h5>
+                        <p class="card-text">{{ card['text'] }}</p>
+                        <form method="post" action="{{ url_for('drive') }}">
+                          <button class="btn btn-outline-success" type="submit" name="submit_button" value={{ card['index'] }}>Submit</button>
+</form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+  </div>
+</div>
+  </div>
+  
+<div class="card border-success mb-3 contaoner">
+  <div class="card-header bg-transparent border-success">Drive Cycyle developed by E-mobililty Lab for Indian specfic conditions </div>
+  <div class="card-body text-success">
+    <div class="container">
+        <div class="row">
+            {% for card in labDriveCycle %}
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <img src="http://getelectricvehicle.com/wp-content/uploads/2018/01/FTP-75.png"card-img-top" alt="{{ card['title'] }}">
+                    <div class="card-body text-success">
+                        <h5 class="card-title">{{ card['title'] }}</h5>
+                        <p class="card-text">{{ card['text'] }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+  </div>
+</div>
+  </div>
+  <div class="card-footer bg-transparent border-success">Footer</div>
+</div>
+
+
+
+
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+
+
+{% endblock content %}

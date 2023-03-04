@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>Vehicle Calculation Form</h1>
+  <form method="post" action="{{ url_for('analysis') }}">
+    <table class="table table-bordered table-hover table-success">
+      <thead class="thead-dark ">
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+          <th>Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mass</td>
+          <td><input type="number" class="form-control" name="mass" step="0.01" required placeholder="Enter Mass"></td>
+          <td>kg</td>
+        </tr>
+        <tr>
+          <td>Density of Air</td>
+          <td><input type="number" class="form-control" name="rho" step="0.01" required placeholder="Enter Density"></td>
+          <td>kg/m<sup>3</sup></td>
+        </tr>
+        <tr>
+          <td>Aerodynamic Drag Coefficient</td>
+          <td><input type="number" class="form-control" name="Cd" step="0.01" required placeholder="Enter Coefficient"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Frontal Area of Vehicle</td>
+          <td><input type="number" class="form-control" name="Af" step="0.01" required placeholder="Enter Area"></td>
+          <td>m<sup>2</sup></td>
+        </tr>
+        <tr>
+          <td>Gravitational Coefficient</td>
+          <td><input type="number" class="form-control" name="g" step="0.01" required placeholder="Enter Gravitational Coefficient"></td>
+          <td>m/s<sup>2</sup></td>
+        </tr>
+        <tr>
+          <td>Road Angle</td>
+          <td><input type="number" class="form-control" name="alpha" step="0.01" required placeholder="Enter Angle"></td>
+          <td>degrees</td>
+        </tr>
+        <tr>
+          <td>Radius of Wheel</td>
+          <td><input type="number" class="form-control" name="r" step="0.01" required placeholder="Enter Radius"></td>
+          <td>m</td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Calculate</button>
+  </form>
+</div>
+
+
+{% endblock %}

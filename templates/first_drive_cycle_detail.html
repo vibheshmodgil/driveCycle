@@ -1,0 +1,257 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container" style="width: 100vw; height: 40vh;">
+  <div class="card text-center">
+    <div class="card-header ">
+      <!-- Page heading -->
+      <h2>The DriveCycle along with the properties are shown below :</h2>
+    </div>
+    <div class="card-body">   
+    <div id="carouselExampleDark" class="carousel carousel-dark slide">
+      <!-- Carousel indicators -->
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      </div>
+      <div class="carousel-inner">
+        <!-- First slide with speed chart -->
+        <div class="carousel-item active" data-bs-interval="10000">
+          <canvas id="speedChart" class="d-block w-100" style="width: 100%; height: 40vh;"></canvas>
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Speed Vs Time</h5>
+            <p>Some representative placeholder content for the first slide.</p>
+          </div>
+        </div>
+        <!-- Second slide with acceleration chart -->
+        <div class="carousel-item" data-bs-interval="2000">
+          <canvas id="accelerationChart" class="d-block w-100" style="width: 100%; height: 10vh;"></canvas>
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Acceleration Vs Time </h5>
+            <p>Some representative placeholder content for the second slide.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel navigation buttons -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="card mt-5">
+  <div class="card-header">
+    Properties of Drive Cycle
+  </div>
+  <div class="card-body">
+    <div class="container">
+  <table class="table table-success table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Property</th>
+        <th>Value</th>
+        <th>Units</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+</div>
+    <form method="post" action="{{ url_for('data_required') }}">
+                          <button class="btn btn-outline-success" type="submit" name="submit_button" value= "submit" }}>Submit</button>
+</form>
+  </div>
+</div>
+
+
+
+  
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+  var time = {{ df['Time [s]'].tolist()|safe }};
+  var speed = {{ df['Speed [km/h]'].tolist()|safe }};
+  var acceleration = {{ df['Acceleration'].tolist()|safe }};
+  var speedplot = document.getElementById("speedChart").getContext("2d");
+  var speedChart = new Chart(speedplot, {
+    type: "line",
+    data: {
+      labels: time,
+      datasets: [
+        {
+          label: "Speed vs Time",
+          data: speed,
+          backgroundColor: "rgba(255, 99, 132, 0.2)",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {},
+  });
+
+  
+  var accelerationPlot = document.getElementById("accelerationChart").getContext("2d");
+  var accelerationChart = new Chart(accelerationPlot, {
+    type: "line",
+    data: {
+      labels: time,
+      datasets: [
+        {
+          label: "Acceleration vs Time",
+          data: acceleration,
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+          borderColor: "rgba(54, 162, 235, 1)",
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {},
+  });
+
+
+
+
+// Calculate the maximum speed
+const maxSpeed =  Math.max.apply(null, speed).toFixed(5);
+
+// Calculate the maximum acceleration
+const maxAcceleration = Math.max.apply(null,acceleration).toFixed(5);
+
+// Calculate the distance covered
+var distanceCovered = speed.reduce((distance, speed, index, speeds) => {
+  if (index === 0) return distance;
+  const timeDiff = time[index] - time[index - 1];
+  const averageSpeed = (speed + speeds[index - 1]) / 2;
+  return distance + averageSpeed * (timeDiff / 3600);
+}, 0);
+distanceCovered = distanceCovered.toFixed(5)
+// Calculate the average speed
+var averageSpeed = distanceCovered / (time[time.length - 1] / 3600);
+averageSpeed = averageSpeed.toFixed(5)
+
+// Calculate the kinetic intensity
+var kineticIntensity = maxSpeed * maxAcceleration;
+kineticIntensity = kineticIntensity.toFixed(5)
+
+// Calculate the average running time
+var averageRunningTime = distanceCovered / averageSpeed;
+averageRunningTime = averageRunningTime.toFixed(5)
+
+// Calculate the average acceleration
+var averageAcceleration = acceleration.reduce((sum, acceleration) => sum + acceleration, 0) / acceleration.length;
+averageAcceleration = averageAcceleration.toFixed(5)
+  
+// Calculate the average deceleration
+var averageDeceleration = acceleration.reduce((sum, acceleration) => sum + Math.max(acceleration, 0), 0) / acceleration.length;
+averageDeceleration = averageDeceleration.toFixed(5)
+// Calculate the average stop duration
+const averageStopDuration = time.reduce((sum, time, index, times) => {
+  if (index === 0 || index === times.length - 1) return sum;
+  const timeDiff = time[index] - time[index - 1];
+
+  if (speed[index] < 0) {
+    return sum + timeDiff;
+  } else {
+    return sum;
+
+
+  }
+}, 0) ;
+
+// Get a reference to the table
+const table = document.querySelector('table');
+
+// Get a reference to the tbody element
+const tbody = table.querySelector('tbody');
+
+// Create an array of objects representing the properties and values for the table
+const properties = [
+   {
+    property: 'Distance Covered',
+    value: distanceCovered,
+    unit: 'Km'
+  },
+  {
+    property: 'Max Speed',
+    value: maxSpeed,
+    unit: 'Km/hr'
+  },
+  {
+    property: 'Average Running Time',
+    value: averageRunningTime,
+    unit: 'hours'
+  },
+  {
+    property: 'Average Speed',
+    value: averageSpeed,
+    unit: 'Km/hr'
+  },
+  {
+    property: 'Kinetic Intensity',
+    value: kineticIntensity,
+    unit: 'Km/hr'
+  },
+  {
+    property: 'Max Acceleration',
+    value: maxAcceleration,
+    unit: 'm/s^2'
+  },
+  {
+    property: 'Average Acceleration',
+    value: averageAcceleration,
+    unit: 'm/s^2'
+  },
+  {
+    property: 'Average Deceleration',
+    value: averageDeceleration,
+    unit: 'm/s^2'
+  },
+  {
+    property: 'Average Stop Duration',
+    value: averageStopDuration,
+    unit: 'minutes'
+  },
+];
+
+// Loop through the properties array and create a new row for each object
+for (const prop of properties) {
+  // Create a new row element
+  const row = document.createElement('tr');
+
+  // Create a new cell for the property name
+  const propCell = document.createElement('td');
+  propCell.textContent = prop.property;
+
+  // Create a new cell for the property value
+  const valueCell = document.createElement('td');
+  valueCell.textContent = prop.value;
+
+  // Create a new cell for the property unit
+  const unitCell = document.createElement('td');
+  unitCell.textContent = prop.unit;
+
+  // Append the cells to the new row element
+  row.appendChild(propCell);
+  row.appendChild(valueCell);
+  row.appendChild(unitCell);
+
+  // Append the new row to the tbody element
+  tbody.appendChild(row);
+}
+
+</script>
+
+{% endblock content %}
