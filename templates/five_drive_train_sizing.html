@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>Vehicle Calculation Form</h1>
+  <form method="post" action="{{ url_for('drivetrainsizing') }}">
+    <table class="table table-bordered table-hover table-success">
+      <thead class="thead-dark ">
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Gear Ratio</td>
+          <td><input type="number" class="form-control" name="gear_ratio" step="0.01" required placeholder="Enter Gear Ratio"></td>
+        </tr>
+        <tr>
+          <td>Gear Efficiency</td>
+          <td><input type="number" class="form-control" name="gear_efficiency" step="0.01" required placeholder="Enter Gear Efficiency"></td>
+        </tr>
+        <tr>
+          <td>Motor overload factor for power </td>
+          <td><input type="number" class="form-control" name="motor_overload_factor_for_power" step="0.01" required placeholder="Enter Motor Overload Factor"></td>
+        </tr>
+        <tr>
+          <td>Motor overload factor for torque</td>
+          <td><input type="number" class="form-control" name="motor_overload_factor_for_torque" step="0.01" required placeholder="Enter Motor overload factor for torque"></td>
+        </tr>
+        <tr>
+          <td>Motor max_to_base_speed ratio</td>
+          <td><input type="number" class="form-control" name="motor_max_to_base_speed_ratio" step="0.01" required placeholder="Enter Motor max_to_base_speed ratio"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Calculate</button>
+  </form>
+</div>
+
+{% endblock content %}

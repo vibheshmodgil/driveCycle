@@ -18,7 +18,7 @@
 </style>
 
 <div class="container">
-  <h1>Drive Cycle Forces</h1>
+  <h1>Power Associated with each Force</h1>
   <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
@@ -26,7 +26,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h2>ALL Force</h2>
+                <h2>Power for all Force</h2>
               </div>
               <div class="card-body">
                 <canvas id="allforces-chart"></canvas>
@@ -40,7 +40,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h2>Acceleration Force</h2>
+                <h2>Power for Acceleration Force</h2>
               </div>
               <div class="card-body">
                 <canvas id="acceleration-chart"></canvas>
@@ -54,7 +54,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h2>Drag Force</h2>
+                <h2>Power for Drag Force</h2>
               </div>
               <div class="card-body">
                 <canvas id="drag-chart"></canvas>
@@ -68,7 +68,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h2>Weight Force</h2>
+                <h2>Power for weight Force</h2>
               </div>
               <div class="card-body">
                 <canvas id="weight-chart"></canvas>
@@ -82,7 +82,7 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h2>Rolling Force</h2>
+                <h2>Power for Rolling Force</h2>
               </div>
               <div class="card-body">
                 <canvas id="rolling-chart"></canvas>
@@ -101,7 +101,7 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
-  <form method="post" action="{{ url_for('power_analysis') }}">
+  <form method="post" action="{{ url_for('datadrivetrainsizing') }}">
     <button type="submit" class="btn btn-primary">Next</button>
   </form>
 </div>
@@ -118,19 +118,22 @@
       // Define the data for each chart
       var time = {{ df['Time [s]'].tolist()|safe }};
       var speed = {{ df['Speed [km/h]'].tolist()|safe }};
-      var acceleration = {{ df['Acceleration'].tolist()|safe }};
-      var force_acceleration = {{ df_force_analysis['Force_Acceleration'].tolist()|safe }};
-      var force_drag = {{ df_force_analysis['Force_Drag'].tolist()|safe }};
-      var force_weight = {{ df_force_analysis['Force_Weight'].tolist()|safe }};
-      var force_rolling = {{ df_force_analysis['Force_Rolling_Resistance'].tolist()|safe }};
-      var force_total = {{ df_force_analysis['Force_Total'].tolist()|safe }};
+      var power_acceleration = {{ df_force_analysis['Power_Acceleration'].tolist()|safe }};
+      var power_drag = {{ df_force_analysis['Power_Drag'].tolist()|safe }};
+      var power_weight = {{ df_force_analysis['Power_Weight'].tolist()|safe }};
+      var power_rolling = {{ df_force_analysis['Power_Rolling_Resistance'].tolist()|safe }};
+      var power_total = {{ df_force_analysis['Power_Total'].tolist()|safe }};
       console.log("Worked")
+     
+  
+  
+ 
 
       var allforceData = {
         labels: time,
         datasets: [{
-          label: 'Total Force',
-          data: force_total,
+          label: 'Power for all the forces',
+          data: power_total,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1
@@ -140,8 +143,8 @@
       var accelerationData = {
         labels: time,
         datasets: [{
-          label: 'Acceleration Force',
-          data: force_acceleration,
+          label: 'Power due to Acceleration ',
+          data: power_acceleration,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1
@@ -152,7 +155,7 @@
         labels: time ,
         datasets: [{
           label: 'Drag Force',
-          data: force_drag,
+          data: power_drag,
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
           borderWidth: 1
@@ -162,8 +165,8 @@
       var weightData = {
         labels: time,
         datasets: [{
-          label: 'Weight Force',
-          data: force_weight,
+          label: 'Power required for the Weight ',
+          data: power_weight,
           backgroundColor: 'rgba(255, 206, 86, 0.2)',
           borderColor: 'rgba(255, 206, 86, 1)',
           borderWidth: 1 }]
@@ -172,8 +175,8 @@
       var rollingData = {
         labels: time,
         datasets: [{
-          label: 'Rolling Force',
-          data: force_rolling ,
+          label: 'Power required for Rolling',
+          data: power_rolling ,
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1
@@ -183,8 +186,8 @@
       var forceData = {
         labels: time,
         datasets: [{
-          label: 'Total Force',
-          data: force_total,
+          label: 'Power',
+          data: power_total,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1
@@ -255,33 +258,33 @@
   data: {
     labels: time,
     datasets: [{
-      label: 'Total Force',
+      label: 'Power',
       borderColor: 'red',
-      data: force_total,
+      data: power_total,
       fill: false,
       borderWidth: 1
     }, {
-      label: 'Acceleration Force',
+      label: 'power Acceleration',
       borderColor: 'blue',
-      data: force_acceleration,
+      data: power_acceleration,
       fill: false,
       borderWidth: 1
     }, {
-      label: 'Drag Force',
+      label: 'Power Drag',
       borderColor: 'green',
-      data: force_drag,
+      data: power_drag,
       fill: false,
       borderWidth: 1
     }, {
-      label: 'Weight Force',
+      label: 'Power Weight ',
       borderColor: 'purple',
-      data: force_weight,
+      data: power_weight,
       fill: false,
       borderWidth: 1
     }, {
-      label: 'Rolling Force',
+      label: 'Power Rolling ',
       borderColor: 'orange',
-      data: force_rolling,
+      data: power_rolling,
       fill: false,
       borderWidth: 1
     }]
@@ -332,4 +335,7 @@
       
     </script>
 
-{% endblock content %}
+
+
+
+{% endblock %}
