@@ -1,0 +1,231 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class='container'>
+  <div class="card text-center">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+         <button data-page="Page1" class="page btn btn-primary">Speed Torque Chracterstics</button>
+        </li>
+        <li class="nav-item">
+          <button data-page="Page2" class="page btn btn-primary mx-2">Motor Parameters</button>
+          <button data-page="Page3" class="page btn btn-primary mx-2">Efficieny Map</button>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled">Disabled</a>
+        </li>
+      </ul>
+    </div>
+    <div id="Page1" class="crd mt-5">
+      <div class="card-body">
+        <h5 class="card-title">Speed Torque Chracterstics of the motor </h5>
+        <div class="card-body">
+          <canvas id="speed-torque-chracterstics"></canvas>
+        </div>
+    </div>
+    </div>
+    <div id="Page2" class="crd mt-5" style="display: none;">
+     <h5 class="card-title">Motor properties Based on Drive Cycle</h5>
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+            <table class="table table-success table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, value in motorpara.items() %}
+                    <tr>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+  </div>
+ <div id="Page3" class="crd mt-5" style="display: none;">
+  <div id="efficiencyMap"></div>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script>
+    // Load the data
+    var x = {{ X|tojson }};
+    var y = {{ Y|tojson }};
+    var z = {{ Z|tojson }};
+    var speed = {{ df['Motor_Speed_rpm'].tolist()|tojson }};
+    var torque = {{ df['Motor_Torque'].tolist()|tojson }};
+    
+    // Create the trace for the contour plot
+    var trace1 = {
+      x: x,
+      y: y,
+      z: z,
+      type: 'contour',
+      colorscale: 'Viridis'
+    };
+    
+    // Create the trace for the scatter plot
+    var trace2 = {
+      x: speed,
+      y: torque,
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 8,
+        color: 'red'
+      }
+    };
+    
+    // Set the layout of the plot
+    var layout = {
+      title: {
+        text: 'Efficiency Map',
+        font: {
+          size: 16
+        }
+      },
+      xaxis: {
+        title: 'Speed',
+        titlefont: {
+          size: 14
+        }
+      },
+      yaxis: {
+        title: 'Torque',
+        titlefont: {
+          size: 14
+        }
+      },
+      margin: {
+        l: 50,
+        r: 50,
+        b: 50,
+        t: 50,
+        pad: 4
+      },
+      paper_bgcolor: 'white',
+      plot_bgcolor: 'white',
+      height: 600,
+      width: 600
+    };
+    
+    // Create the data array for the plot
+    var data = [trace1, trace2];
+    
+    // Plot the chart
+    Plotly.newPlot('efficiencyMap', data, layout);
+  </script>
+   <form method="post" action="{{ url_for('batteryCalculations') }}">
+     <button type="submit" class="btn btn-primary">Calculate</button>
+   </form>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Define the data for each chart
+var motorTorque = {{ df['Motor_Torque'].tolist()|safe }};
+var plottingSpeed = {{ df['plotting_Speed_Rpm'].tolist()|safe }};
+var plottingRatedTorque = {{ df['plotting_rated_motor_torque'].tolist()|safe }};
+var plottingPeakTorque = {{ df['plotting_peak_motor_torque'].tolist()|safe }};
+plottingSpeed = plottingSpeed.map(num => Math.round(num));
+
+// Get the chart canvases
+var MotorChart = document.getElementById('speed-torque-chracterstics').getContext('2d');
+
+var MotorChart = new Chart(MotorChart, {
+  type: 'line',
+  data: {
+    labels: plottingSpeed,
+    datasets: [{
+      label: "Rated Torque",
+      borderColor: 'blue',
+      data: plottingRatedTorque,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Peak Torque',
+      borderColor: 'green',
+      data: plottingPeakTorque,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Motor Torque',
+      borderColor: 'red',
+      data: motorTorque,
+      type: 'scatter',
+      fill: false,
+      showLine: false,
+      borderWidth: 1
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Forces Chart',
+      fontSize: 20
+    },
+    legend: {
+      display: true,
+      labels: {
+        fontSize: 14
+      }
+    },
+    elements: {
+      line: {
+        borderWidth: 1
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          fontSize: 14
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Force (N)',
+          fontSize: 16
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          fontSize: 14
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Time (s)',
+          fontSize: 16
+        }
+      }]
+    }
+  }
+});
+
+  
+function showPage(page){
+    pages = document.querySelectorAll(".crd")
+    for(i of pages){
+        i.style.display = "none";
+    }
+    document.querySelector(`#${page}`).style.display = "block";
+}
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+    var btns = document.querySelectorAll(".page")
+    for (let i of btns){
+        i.onclick = ()=>{
+            showPage(i.dataset.page)
+        }
+    }
+})
+
+</script>
+
+{% endblock content %}

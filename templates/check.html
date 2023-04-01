@@ -1,122 +1,366 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<style>
-.carousel-item {
-  width: 100%;
-  height: 60vh;
-  margin: 0 auto;
-}
-
-
-</style>
-<div class='container'>
-<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active" data-bs-interval="10000">
-       <canvas id="speedChart" class="d-block w-100 " ></canvas>
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Speed Vs Time</h5>
+ <body>
+    <div class='container'>
+      <div class="card text-center">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <button data-page="Page1" class="page btn btn-primary">Force Analysis</button>
+            </li>
+            <li class="nav-item">
+              <button data-page="Page2" class="page btn btn-primary mx-2">Power Analysis</button>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Disabled</a>
+            </li>
+          </ul>
+        </div>
+        <div id="Page1" class="card-body crd mt-5">
+          <h5 class="card-title">Force Analysis</h5>
+          <div class="card-body">
+             <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>ALL Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="allforces-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Acceleration Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="acceleration-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Drag Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="drag-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Weight Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="weight-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Rolling Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="rolling-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="carousel-item" data-bs-interval="2000">
-      <canvas id="accelerationChart" class="d-block w-100" ></canvas>
-      <div class="carousel-caption d-none d-md-block">
-        <h5>Acceleration Vs Time </h5>
+    <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#chart-carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  <form method="post" action="{{ url_for('power_analysis') }}">
+    <button type="submit" class="btn btn-primary">Next</button>
+  </form>
+
+
+          </div>
+        </div>
+        <div id="Page2" class="card-body crd mt-5" style="display: none;">
+          <h5 class="card-title">Power Analysis</h5>
+          <h1>Power analysis content goes here</h1>
+        </div>
       </div>
     </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-</div>
 
-<div class="container">
-  <h2>Properties</h2>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Property</th>
-        <th>Value</th>
-        <th>Units</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Max Speed</td>
-        <td>250</td>
-        <td>mph</td>
-      </tr>
-      <tr>
-        <td>Max Acceleration</td>
-        <td>2.5</td>
-        <td>seconds (0-60 mph)</td>
-      </tr>
-      <tr>
-        <td>Weight</td>
-        <td>2,000</td>
-        <td>lbs</td>
-      </tr>
-      <tr>
-        <td>Engine</td>
-        <td>6.2</td>
-        <td>L V8</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <script>
+      const pageButtons = document.querySelectorAll(".page");
+      const cardPages = document.querySelectorAll(".crd");
 
+      function showPage(page) {
+        for (let i = 0; i < cardPages.length; i++) {
+          cardPages[i].style.display = "none";
+        }
+
+        const targetPage = document.querySelector(`#${page}`);
+        if (targetPage) {
+          targetPage.style.display = "block";
+        } else {
+          console.warn(`Page ${page} not found.`);
+        }
+      }
+
+      pageButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          showPage(button.dataset.page);
+        });
+      });
+    </script>
+
+       <!-- Include Chart.js library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-  var time = {{ df['Time [s]'].tolist()|safe }};
-  var speed = {{ df['Speed [km/h]'].tolist()|safe }};
-  var acceleration = {{ df['Acceleration'].tolist()|safe }};
-  var speedplot = document.getElementById("speedChart").getContext("2d");
-  var speedChart = new Chart(speedplot, {
-    type: "line",
-    data: {
-      labels: time,
-      datasets: [
-        {
-          label: "Speed vs Time",
-          data: speed,
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {},
-  });
-  
-  var accelerationPlot = document.getElementById("accelerationChart").getContext("2d");
-  var accelerationChart = new Chart(accelerationPlot, {
-    type: "line",
-    data: {
-      labels: time,
-      datasets: [
-        {
-          label: "Acceleration vs Time",
-          data: acceleration,
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-          borderColor: "rgba(54, 162, 235, 1)",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {},
-  });
+    <script>
+      // Define the data for each chart
+      var time = {{ df['Time [s]'].tolist()|safe }};
+      var speed = {{ df['Speed [km/h]'].tolist()|safe }};
+      var acceleration = {{ df['Acceleration'].tolist()|safe }};
+      var force_acceleration = {{ df_force_analysis['Force_Acceleration'].tolist()|safe }};
+      var force_drag = {{ df_force_analysis['Force_Drag'].tolist()|safe }};
+      var force_weight = {{ df_force_analysis['Force_Weight'].tolist()|safe }};
+      var force_rolling = {{ df_force_analysis['Force_Rolling_Resistance'].tolist()|safe }};
+      var force_total = {{ df_force_analysis['Force_Total'].tolist()|safe }};
+      console.log("Worked")
 
-</script>
-{% endblock content %}
+      var allforceData = {
+        labels: time,
+        datasets: [{
+          label: 'Total Force',
+          data: force_total,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      };
+      
+      var accelerationData = {
+        labels: time,
+        datasets: [{
+          label: 'Acceleration Force',
+          data: force_acceleration,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      var dragData = {
+        labels: time ,
+        datasets: [{
+          label: 'Drag Force',
+          data: force_drag,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      var weightData = {
+        labels: time,
+        datasets: [{
+          label: 'Weight Force',
+          data: force_weight,
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 1 }]
+      };
+
+      var rollingData = {
+        labels: time,
+        datasets: [{
+          label: 'Rolling Force',
+          data: force_rolling ,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      var forceData = {
+        labels: time,
+        datasets: [{
+          label: 'Total Force',
+          data: force_total,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      // Get the chart canvases
+      var accelerationChart = document.getElementById('acceleration-chart').getContext('2d');
+      var dragChart = document.getElementById('drag-chart').getContext('2d');
+      var weightChart = document.getElementById('weight-chart').getContext('2d');
+      var rollingChart = document.getElementById('rolling-chart').getContext('2d');
+      var allforcesChart = document.getElementById('allforces-chart').getContext('2d');
+
+      // Create the charts
+      var accelerationChart = new Chart(accelerationChart, {
+        type: 'line',
+        data: accelerationData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      var dragChart = new Chart(dragChart, {
+        type: 'line',
+        data: dragData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      var weightChart = new Chart(weightChart, {
+        type: 'line',
+        data: weightData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      var rollingChart = new Chart(rollingChart, {
+        type: 'line',
+        data: rollingData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+
+
+   
+   var allforcesChart = new Chart(allforcesChart, {
+  type: 'line',
+  data: {
+    labels: time,
+    datasets: [{
+      label: 'Total Force',
+      borderColor: 'red',
+      data: force_total,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Acceleration Force',
+      borderColor: 'blue',
+      data: force_acceleration,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Drag Force',
+      borderColor: 'green',
+      data: force_drag,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Weight Force',
+      borderColor: 'purple',
+      data: force_weight,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Rolling Force',
+      borderColor: 'orange',
+      data: force_rolling,
+      fill: false,
+      borderWidth: 1
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Forces Chart',
+      fontSize: 20
+    },
+    legend: {
+      display: true,
+      labels: {
+        fontSize: 14
+      }
+    },
+    elements: {
+      line: {
+        borderWidth: 1
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          fontSize: 14
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Force (N)',
+          fontSize: 16
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          fontSize: 14
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Time (s)',
+          fontSize: 16
+        }
+      }]
+    }
+  }
+});
+
+      
+    </script>
+  </body>
+
+
+    {% endblock %}

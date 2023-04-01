@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <table class="table table-striped">
+            <table class="table table-success table-bordered table-hover">
                 <thead>
                     <tr>
                         <th>Parameter</th>
@@ -23,6 +23,9 @@
             </table>
         </div>
     </div>
+  <form method="post" action="{{ url_for('speedTorqueChracterstics') }}">
+    <button type="submit">Next</button>
+  </form>
 </div>
 
 

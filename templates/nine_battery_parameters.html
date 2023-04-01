@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+		<h1>Battery Parameters </h1>
+		<table class="table table-success table-bordered table-hover">
+			<thead>
+				<tr>
+					<th>Stat</th>
+					<th>Value</th>
+					<th>Unit</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Total Energy Consumed in Drive Cycle</td>
+					<td>{{ '{:.2f}'.format(data['Total_energy_consumed_in_drive_cycle']) }}</td>
+					<td>kWh</td>
+				</tr>
+				<tr>
+					<td>Mileage</td>
+					<td>{{ '{:.2f}'.format(data['Milage']) }}</td>
+					<td>km/kWh</td>
+				</tr>
+				<tr>
+					<td>Battery Size</td>
+					<td>{{ '{:.2f}'.format(data['battery_size']) }}</td>
+					<td>kWh</td>
+				</tr>
+				<tr>
+					<td>Optimal Battery Power</td>
+					<td>{{ '{:.2f}'.format(data['optimal_battery_power']) }}</td>
+					<td>kW</td>
+				</tr>
+				<tr>
+					<td>Weight of the Battery</td>
+					<td>{{ '{:.2f}'.format(data['weight_of_the_battery']) }}</td>
+					<td>kg</td>
+				</tr>
+				<tr>
+					<td>Battery Ah</td>
+					<td>{{ '{:.2f}'.format(data['battery_Ah']) }}</td>
+					<td>Ah</td>
+				</tr>
+				<tr>
+					<td>Usable Ah</td>
+					<td>{{ '{:.2f}'.format(data['usable_Ah']) }}</td>
+					<td>Ah</td>
+				</tr>
+			</tbody>
+		</table>
+	
+</div>
+{% endblock%}

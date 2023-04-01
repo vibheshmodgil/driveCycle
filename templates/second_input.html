@@ -14,13 +14,25 @@
       </thead>
       <tbody>
         <tr>
+          <td>Vehicle Name</td>
+          <td>
+            <select id="vehicle-select" class="form-control" name="vehicle" required>
+              <option value="" disabled selected>Select a vehicle</option>
+              {% for vehicle in vehicle_data %}
+              <option value="{{ vehicle.name }}">{{ vehicle.name }}</option>
+              {% endfor %}
+            </select>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
           <td>Mass</td>
           <td><input type="number" class="form-control" name="mass" step="0.01" required placeholder="Enter Mass"></td>
           <td>kg</td>
         </tr>
         <tr>
           <td>Density of Air</td>
-          <td><input type="number" class="form-control" name="rho" step="0.01" required placeholder="Enter Density"></td>
+          <td><input type="number" class="form-control" name="rho" step="0.01" required placeholder="Enter Density" value="1.2"></td>
           <td>kg/m<sup>3</sup></td>
         </tr>
         <tr>
@@ -33,14 +45,10 @@
           <td><input type="number" class="form-control" name="Af" step="0.01" required placeholder="Enter Area"></td>
           <td>m<sup>2</sup></td>
         </tr>
-        <tr>
-          <td>Gravitational Coefficient</td>
-          <td><input type="number" class="form-control" name="g" step="0.01" required placeholder="Enter Gravitational Coefficient"></td>
-          <td>m/s<sup>2</sup></td>
-        </tr>
+
         <tr>
           <td>Road Angle</td>
-          <td><input type="number" class="form-control" name="alpha" step="0.01" required placeholder="Enter Angle"></td>
+          <td><input type="number" class="form-control" name="alpha" step="0.01" required placeholder="Enter Angle" value="0"></td>
           <td>degrees</td>
         </tr>
         <tr>
@@ -53,6 +61,45 @@
     <button type="submit" class="btn btn-primary">Calculate</button>
   </form>
 </div>
+<script>
+  console.log("atleast the script is running i guess")
+  const vehicleSelect = document.getElementById('vehicle-select');
+  console.log(vehicleSelect)
+  const massInput = document.querySelector('input[name="mass"]');
+  const CdInput = document.querySelector('input[name="Cd"]');
+  const AfInput = document.querySelector('input[name="Af"]');
+  const rInput = document.querySelector('input[name="r"]');
+
+  const vehicleData = {
+    {% for vehicle in vehicle_data %}
+      "{{ vehicle.name }}": {
+        "mass": {{ vehicle.weight }},
+        "Cd": {{ vehicle.drag_coefficient }},
+        "Af": {{ vehicle.vehicle_area }},
+        "r": {{ vehicle.wheel_radius }}
+      },
+    {% endfor %}
+  };
+  console.log('vehicleData')
+  vehicleSelect.addEventListener('change', () => {
+    console.log('I am in ');
+    
+    const selectedVehicle = vehicleSelect.value;
+    console.log(selectedVehicle)
+    if (selectedVehicle in vehicleData) {
+      const data = vehicleData[selectedVehicle];
+      massInput.value = data.mass;
+      CdInput.value = data.Cd;
+      AfInput.value = data.Af;
+      rInput.value = data.r;
+    } else {
+      massInput.value = '';
+      CdInput.value = '';
+      AfInput.value = '';
+      rInput.value = '';
+    }
+  });
+</script>
 
 
 {% endblock %}

@@ -1,6 +1,9 @@
+
 {% extends 'layout.html' %}
 
 {% block content %}
+
+
 <style>
 
   /* Make the carousel take up 70% of the screen width */
@@ -17,9 +20,26 @@
   }
 </style>
 
-<div class="container">
-  <h1>Drive Cycle Forces</h1>
-  <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
+
+ <body>
+    <div class='container'>
+      <div class="card text-center">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <button data-page="Page1" class="page btn btn-primary">Force Analysis</button>
+            </li>
+            <li class="nav-item">
+              <button data-page="Page2" class="page btn btn-primary mx-2">Power Analysis</button>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled">Disabled</a>
+            </li>
+          </ul>
+        </div>
+        <div id="Page1" class="card-body crd mt-5">
+          <div class="card-body">
+             <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <div class="row">
@@ -101,17 +121,127 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
-  <form method="post" action="{{ url_for('power_analysis') }}">
-    <button type="submit" class="btn btn-primary">Next</button>
-  </form>
+
+          </div>
+        </div>
+        <div id="Page2" class="card-body crd mt-5" style="display: none;">
+  <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Power for all Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="power_allforces-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Power for Acceleration Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="power_acceleration-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Power for Drag Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="power_drag-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Power for weight Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="power_weight-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+                <h2>Power for Rolling Force</h2>
+              </div>
+              <div class="card-body">
+                <canvas id="power_rolling-chart"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel1" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#chart-carousel1" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  
 </div>
 
+        </div>
+      </div>
+      <form method="post" action="{{ url_for('datadrivetrainsizing') }}">
+    <button type="submit" class="btn btn-primary">Next</button>
+  </form>
+    </div>
 
+    <script>
+      const pageButtons = document.querySelectorAll(".page");
+      const cardPages = document.querySelectorAll(".crd");
 
+      function showPage(page) {
+        for (let i = 0; i < cardPages.length; i++) {
+          cardPages[i].style.display = "none";
+        }
 
+        const targetPage = document.querySelector(`#${page}`);
+        if (targetPage) {
+          targetPage.style.display = "block";
+        } else {
+          console.warn(`Page ${page} not found.`);
+        }
+      }
 
+      pageButtons.forEach(button => {
+        button.addEventListener("click", () => {
+          showPage(button.dataset.page);
+        });
+      });
+    </script>
 
-    <!-- Include Chart.js library -->
+       <!-- Include Chart.js library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -327,9 +457,231 @@
       }]
     }
   }
+});      
+    </script>
+ <script>
+      // Define the data for each chart
+      var time = {{ df['Time [s]'].tolist()|safe }};
+      var speed = {{ df['Speed [km/h]'].tolist()|safe }};
+      var power_acceleration = {{ df_force_analysis['Power_Acceleration'].tolist()|safe }};
+      var power_drag = {{ df_force_analysis['Power_Drag'].tolist()|safe }};
+      var power_weight = {{ df_force_analysis['Power_Weight'].tolist()|safe }};
+      var power_rolling = {{ df_force_analysis['Power_Rolling_Resistance'].tolist()|safe }};
+      var power_total = {{ df_force_analysis['Power_Total'].tolist()|safe }};
+      console.log("Worked")
+     
+  
+  
+ 
+
+      var power_allforceData = {
+        labels: time,
+        datasets: [{
+          label: 'Power for all the forces',
+          data: power_total,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      };
+      
+      var power_accelerationData = {
+        labels: time,
+        datasets: [{
+          label: 'Power due to Acceleration ',
+          data: power_acceleration,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      var power_dragData = {
+        labels: time ,
+        datasets: [{
+          label: 'Drag Force',
+          data: power_drag,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      var power_weightData = {
+        labels: time,
+        datasets: [{
+          label: 'Power required for the Weight ',
+          data: power_weight,
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          borderWidth: 1 }]
+      };
+
+      var power_rollingData = {
+        labels: time,
+        datasets: [{
+          label: 'Power required for Rolling',
+          data: power_rolling ,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      var power_forceData = {
+        labels: time,
+        datasets: [{
+          label: 'Power',
+          data: power_total,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      };
+
+      // Get the chart canvases
+      var power_accelerationChart = document.getElementById('power_acceleration-chart').getContext('2d');
+      var power_dragChart = document.getElementById('power_drag-chart').getContext('2d');
+      var power_weightChart = document.getElementById('power_weight-chart').getContext('2d');
+      var power_rollingChart = document.getElementById('power_rolling-chart').getContext('2d');
+      var power_allforcesChart = document.getElementById('power_allforces-chart').getContext('2d');
+
+      // Create the charts
+      var power_accelerationChart = new Chart(power_accelerationChart, {
+        type: 'line',
+        data: power_accelerationData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      var power_dragChart = new Chart(power_dragChart, {
+        type: 'line',
+        data: power_dragData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      var power_weightChart = new Chart(power_weightChart, {
+        type: 'line',
+        data: power_weightData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      var power_rollingChart = new Chart(power_rollingChart, {
+        type: 'line',
+        data: power_rollingData,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+
+
+   
+   var power_allforcesChart = new Chart(power_allforcesChart, {
+  type: 'line',
+  data: {
+    labels: time,
+    datasets: [{
+      label: 'Power',
+      borderColor: 'red',
+      data: power_total,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'power Acceleration',
+      borderColor: 'blue',
+      data: power_acceleration,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Power Drag',
+      borderColor: 'green',
+      data: power_drag,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Power Weight ',
+      borderColor: 'purple',
+      data: power_weight,
+      fill: false,
+      borderWidth: 1
+    }, {
+      label: 'Power Rolling ',
+      borderColor: 'orange',
+      data: power_rolling,
+      fill: false,
+      borderWidth: 1
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Forces Chart',
+      fontSize: 20
+    },
+    legend: {
+      display: true,
+      labels: {
+        fontSize: 14
+      }
+    },
+    elements: {
+      line: {
+        borderWidth: 1
+      }
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          fontSize: 14
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Force (N)',
+          fontSize: 16
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          fontSize: 14
+        },
+        scaleLabel: {
+          display: true,
+          labelString: 'Time (s)',
+          fontSize: 16
+        }
+      }]
+    }
+  }
 });
 
       
     </script>
 
-{% endblock content %}
+   
+  </body>
+
+
+    {% endblock %}

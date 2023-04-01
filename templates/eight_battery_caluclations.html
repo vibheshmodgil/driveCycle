@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class='container'>
+
+  <div class="card text-center">
+    <div class="card-header" style="text-align: left;">
+      Enter parametrs for the Battery Calculations
+    </div>
+    <form method="post" action="{{ url_for('batteryParameters') }}">
+    <table class="table table-bordered table-hover table-success">
+      <thead class="thead-dark ">
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cyclic Efficiency of Inverter </td>
+          <td><input type="number" class="form-control" name="Cyclic_inverter_efficiency" step="0.01" required placeholder="Enter the Inverter efficiency"></td>
+        </tr>
+        <tr>
+          <td>Cyclic Motor Efficiency </td>
+          <td><input type="number" class="form-control" name="Cyclic_motor_efficiency" step="0.01" required placeholder="Enter Motor Efficiency"></td>
+        </tr>
+        <tr>
+          <td>Desired Range</td>
+          <td><input type="number" class="form-control" name="range_we_wanted" step="0.01" required placeholder="Enter the desired Range"></td>
+        </tr>
+        <tr>
+          <td>Optimal C Rate for the battery</td>
+          <td><input type="number" class="form-control" name="optimal_c_rate" step="0.01" required placeholder="Enter Optimal C rate for the battery"></td>
+        </tr>
+        <tr>
+          <td>Battery Voltage</td>
+          <td><input type="number" class="form-control" name="battery_voltage" step="0.01" required placeholder="Enter the desired battery voltage"></td>
+        </tr>
+        <tr>
+          <td>Battery Utilization</td>
+          <td><input type="number" class="form-control" name="battery_utilization" step="0.01" required placeholder="Enter the desired battery voltage"></td>
+        </tr>
+        </tr>
+        <tr>
+          <td>Specific Energy of the Battery</td>
+          <td><input type="number" class="form-control" name="specific_energy_battery" step="0.01" required placeholder="Enter the Specific Energy of the Battery"></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary">Calculate</button>
+  </form>
+    <div class="card-footer text-body-secondary">
+      2 days ago
+    </div>
+  </div>
+</div>
+{% endblock%}

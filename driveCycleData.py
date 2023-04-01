@@ -22,48 +22,48 @@ standardDriveCycle = [
 labDriveCycle = [
     {
         'image': 'card-image1.jpg',
-        'title': 'Card Title 1',
-        'text': 'This is a sample text for card 1'
+        'title': 'Izzatnagar',
+        'text': 'A locality in Bareilly in the Indian state of Uttar Pradesh.'
     },
     {
         'image': 'card-image2.jpg',
-        'title': 'Card Title 2',
-        'text': 'This is a sample text for card 2'
+        'title': 'ZirakPur',
+        'text': 'A satellite town, in Mohali District, Punjab, neighboring Mohali, Chandigarh in India.'
     },
     {
         'image': 'card-image3.jpg',
-        'title': 'Card Title 3',
-        'text': 'This is a sample text for card 3'
+        'title': 'Kundapura',
+        'text': 'A former small village in northern neighborhood of city Bengaluru in Karnataka,'
     },
     {
         'image': 'card-image4.jpg',
-        'title': 'Card Title 4',
-        'text': 'This is a sample text for card 4'
+        'title': 'Panskura',
+        'text': 'a municipality in Purba Medinipur district in the Indian state of West Bengal.'
     },
     {
         'image': 'card-image5.jpg',
-        'title': 'Card Title 5',
+        'title': 'khrdi',
         'text': 'This is a sample text for card 5'
     },
     {
         'image': 'card-image6.jpg',
-        'title': 'Card Title 6',
-        'text': 'This is a sample text for card 6'
+        'title': 'Kapasahera',
+        'text': 'Kapashera is a Locality in South West Delhi City in Delhi State, India'
     },
     {
         'image': 'card-image7.jpg',
-        'title': 'Card Title 7',
-        'text': 'This is a sample text for card 7'
+        'title': 'Kalayanpur',
+        'text': 'Kalyanpur or Kalianpur is a satellite town of Kanpur in Uttar Pradesh, India.'
     },
     {
         'image': 'card-image8.jpg',
-        'title': 'Card Title 8',
-        'text': 'This is a sample text for card 8'
+        'title': 'Renukoot',
+        'text': 'Renukoot is a city in Sonbhadra district in the Indian state of Uttar Pradesh'
     },
     {
         'image': 'card-image9.jpg',
-        'title': 'Card Title 9',
-        'text': 'This is a sample text for card 9'
+        'title': 'Hyderabad',
+        'text': "The Capital of southern India's Telengana"
     }
 ]
 

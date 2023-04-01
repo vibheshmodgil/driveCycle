@@ -19,7 +19,7 @@
 
 <div class="container">
   <h1>Power Associated with each Force</h1>
-  <div id="chart-carousel" class="carousel slide" data-bs-ride="carousel">
+  <div id="chart-carousel1" class="carousel slide" data-bs-ride="carousel">
     <div class="carousel-inner">
       <div class="carousel-item active">
         <div class="row">
@@ -29,7 +29,7 @@
                 <h2>Power for all Force</h2>
               </div>
               <div class="card-body">
-                <canvas id="allforces-chart"></canvas>
+                <canvas id="power_allforces-chart"></canvas>
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
                 <h2>Power for Acceleration Force</h2>
               </div>
               <div class="card-body">
-                <canvas id="acceleration-chart"></canvas>
+                <canvas id="power_acceleration-chart"></canvas>
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@
                 <h2>Power for Drag Force</h2>
               </div>
               <div class="card-body">
-                <canvas id="drag-chart"></canvas>
+                <canvas id="power_drag-chart"></canvas>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@
                 <h2>Power for weight Force</h2>
               </div>
               <div class="card-body">
-                <canvas id="weight-chart"></canvas>
+                <canvas id="power_weight-chart"></canvas>
               </div>
             </div>
           </div>
@@ -85,18 +85,18 @@
                 <h2>Power for Rolling Force</h2>
               </div>
               <div class="card-body">
-                <canvas id="rolling-chart"></canvas>
+                <canvas id="power_rolling-chart"></canvas>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel" data-bs-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#chart-carousel1" data-bs-slide="prev">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#chart-carousel" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#chart-carousel1" data-bs-slide="next">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
@@ -129,7 +129,7 @@
   
  
 
-      var allforceData = {
+      var power_allforceData = {
         labels: time,
         datasets: [{
           label: 'Power for all the forces',
@@ -140,7 +140,7 @@
         }]
       };
       
-      var accelerationData = {
+      var power_accelerationData = {
         labels: time,
         datasets: [{
           label: 'Power due to Acceleration ',
@@ -151,7 +151,7 @@
         }]
       };
 
-      var dragData = {
+      var power_dragData = {
         labels: time ,
         datasets: [{
           label: 'Drag Force',
@@ -162,7 +162,7 @@
         }]
       };
 
-      var weightData = {
+      var power_weightData = {
         labels: time,
         datasets: [{
           label: 'Power required for the Weight ',
@@ -172,7 +172,7 @@
           borderWidth: 1 }]
       };
 
-      var rollingData = {
+      var power_rollingData = {
         labels: time,
         datasets: [{
           label: 'Power required for Rolling',
@@ -183,7 +183,7 @@
         }]
       };
 
-      var forceData = {
+      var power_forceData = {
         labels: time,
         datasets: [{
           label: 'Power',
@@ -195,16 +195,16 @@
       };
 
       // Get the chart canvases
-      var accelerationChart = document.getElementById('acceleration-chart').getContext('2d');
-      var dragChart = document.getElementById('drag-chart').getContext('2d');
-      var weightChart = document.getElementById('weight-chart').getContext('2d');
-      var rollingChart = document.getElementById('rolling-chart').getContext('2d');
-      var allforcesChart = document.getElementById('allforces-chart').getContext('2d');
+      var power_accelerationChart = document.getElementById('power_acceleration-chart').getContext('2d');
+      var power_dragChart = document.getElementById('power_drag-chart').getContext('2d');
+      var power_weightChart = document.getElementById('power_weight-chart').getContext('2d');
+      var power_rollingChart = document.getElementById('power_rolling-chart').getContext('2d');
+      var power_allforcesChart = document.getElementById('power_allforces-chart').getContext('2d');
 
       // Create the charts
-      var accelerationChart = new Chart(accelerationChart, {
+      var power_accelerationChart = new Chart(power_accelerationChart, {
         type: 'line',
-        data: accelerationData,
+        data: power_accelerationData,
         options: {
           scales: {
             y: {
@@ -214,9 +214,9 @@
         }
       });
 
-      var dragChart = new Chart(dragChart, {
+      var power_dragChart = new Chart(power_dragChart, {
         type: 'line',
-        data: dragData,
+        data: power_dragData,
         options: {
           scales: {
             y: {
@@ -226,9 +226,9 @@
         }
       });
 
-      var weightChart = new Chart(weightChart, {
+      var power_weightChart = new Chart(power_weightChart, {
         type: 'line',
-        data: weightData,
+        data: power_weightData,
         options: {
           scales: {
             y: {
@@ -238,9 +238,9 @@
         }
       });
 
-      var rollingChart = new Chart(rollingChart, {
+      var power_rollingChart = new Chart(power_rollingChart, {
         type: 'line',
-        data: rollingData,
+        data: power_rollingData,
         options: {
           scales: {
             y: {
@@ -253,7 +253,7 @@
 
 
    
-   var allforcesChart = new Chart(allforcesChart, {
+   var power_allforcesChart = new Chart(power_allforcesChart, {
   type: 'line',
   data: {
     labels: time,
@@ -334,8 +334,4 @@
 
       
     </script>
-
-
-
-
 {% endblock %}
