@@ -9,9 +9,9 @@ data = {}
 
 # Open the JSON file and read its contents
 with open('data.json', 'r') as f:
-    data = f.read()
+    data1 = f.read()
 # Parse the JSON data into a dictionary
-driveCyclesData = json.loads(data)
+driveCyclesData = json.loads(data1)
 
 # create Flask application
 app = Flask(__name__)
@@ -22,7 +22,7 @@ app.secret_key = 'some_secret_key'
 # define the route for the home page
 @app.route("/")
 def home():
-  print("Home : ", data)
+  
   # pass drive cycle data to the home page template
   return render_template('home.html',
                          standardDriveCycle=standardDriveCycle,
@@ -33,11 +33,14 @@ def home():
 @app.route("/drive", methods=["POST"])
 def drive():
   # get the value of the submit button from the form
-  value = request.form.get('submit_button')
-  # set column names
-  column_names = ['Time [s]', 'Speed [km/h]']
-  # create a dataframe from the drive cycle data and column names
-  df = pd.DataFrame(driveCycleOne, columns=column_names)
+  key = request.form.get ('submit_button')
+  print(key)
+  df = pd.DataFrame()
+  # set column names  df = pd.DataFrame()
+  df['Speed [km/h]'] = driveCyclesData[key]
+  
+# create a new column called `time` in the DataFrame `df`
+  df['Time [s]'] = pd.Series(list(range(len(driveCyclesData[key]))))
   # calculate acceleration and add it as a new column to the dataframe
   df['Acceleration'] = df['Speed [km/h]'].diff() / df['Time [s]'].diff()
   df.fillna(0, inplace=True)
@@ -45,7 +48,7 @@ def drive():
   data["df"] = df
   # get the dataframe from the session and convert it to JSON
   # pass the JSON data to the first drive cycle detail page template
-  print("drive : ", data)
+  
   return render_template("first_drive_cycle_detail.html", df=df)
 
 

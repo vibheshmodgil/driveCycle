@@ -22,7 +22,7 @@ standardDriveCycle = [
 labDriveCycle = [
     {
         'image': 'card-image1.jpg',
-        'title': 'Izzatnagar',
+        'title': 'Izztnagar',
         'text': 'A locality in Bareilly in the Indian state of Uttar Pradesh.'
     },
     {
